@@ -28,7 +28,7 @@ pipeline {
                 sh "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ."
 
                 // Log in to the Docker registry using credentials
-                sh "docker login -u sara -p ${DOCKER_REGISTRY_PASSWORD}"
+                sh "docker login -u docker-registry -p ${DOCKER_REGISTRY_PASSWORD}"
 
                 // Push the Docker image to the registry
                 sh "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"

@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     def nodeTool = tool name: 'NodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-                    dir('cinema-microservice/cinema-catalog-service/src') { 
+                    dir('cinema-microservice/cinema-catalog-service') { 
                     // Build the microservices here, replace with your build commands
                         sh 'node -v'
                         sh 'npm -v'

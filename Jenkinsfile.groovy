@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        // Specify the NodeJS installation you configured in "Global Tool Configuration"
+        nodejs 'NodeJS'
+    }
     stages {
         stage('Checkout') {
             steps {

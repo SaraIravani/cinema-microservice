@@ -12,6 +12,8 @@ pipeline {
         stage('Build') {
             steps {
                 // Build the microservices here, replace with your build commands
+                sh 'node -v'
+                sh 'npm -v
                 sh 'npm install' // Example for Node.js-based project
                 sh 'npm run build' // Example for Node.js-based project
             }

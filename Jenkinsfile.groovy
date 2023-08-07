@@ -12,19 +12,21 @@ pipeline {
                 git 'https://github.com/SaraIravani/cinema-microservice.git'
             }
         }
-
+        
         stage('Build') {
             steps {
-                def nodeTool = tool 'NodeJS'
-                // Build the microservices here, replace with your build commands
-                sh 'node -v'
-                sh 'npm -v'
-                env.PATH = "${nodeTool}/bin:${env.PATH}"
-                sh 'npm install' // Example for Node.js-based project
-                sh 'npm run build' // Example for Node.js-based project
+                script {
+                    def nodeTool = tool name: 'NodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+                    // Build the microservices here, replace with your build commands
+                    sh 'node -v'
+                    sh 'npm -v'
+                    env.PATH = "${nodeTool}/bin:${env.PATH}"
+                    sh 'npm install' // Example for Node.js-based project
+                    sh 'npm run build' // Example for Node.js-based project
+                }
             }
         }
-
+        
         stage('Docker Build and Push') {
             environment {
                 DOCKER_REGISTRY = '192.168.1.25' // Replace with your Docker registry
@@ -36,7 +38,9 @@ pipeline {
                 sh "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ."
 
                 // Log in to the Docker registry using credentials
-                sh "docker login -u docker-registry -p ${DOCKER_REGISTRY_PASSWORD}"
+                withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', passwordVariable: 'DOCKER_REGISTRY_PASSWORD', usernameVariable: 'DOCKER_REGISTRY_USERNAME')]) {
+                    sh "docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}"
+                }
 
                 // Push the Docker image to the registry
                 sh "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"

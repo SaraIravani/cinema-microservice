@@ -15,10 +15,10 @@ pipeline {
 
         stage('Build') {
             steps {
+                def nodeTool = tool 'NodeJS'
                 // Build the microservices here, replace with your build commands
                 sh 'node -v'
                 sh 'npm -v'
-                def nodeTool = tool 'NodeJS'
                 env.PATH = "${nodeTool}/bin:${env.PATH}"
                 sh 'npm install' // Example for Node.js-based project
                 sh 'npm run build' // Example for Node.js-based project

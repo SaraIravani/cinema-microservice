@@ -23,8 +23,8 @@ pipeline {
                         sh 'node -v'
                         sh 'npm -v'
                         env.PATH = "${nodeTool}/bin:${env.PATH}"
-                        sh 'npm install' // Example for Node.js-based project
-                        sh 'npm run build' // Example for Node.js-based project
+                        sh 'npm install --prefix /var/jenkins_home/workspace/cinema-microservice_master/cinema-microservice/cinema-catalog-service' // Example for Node.js-based project
+                        sh 'npm run build --prefix /var/jenkins_home/workspace/cinema-microservice_master/cinema-microservice/cinema-catalog-service' // Example for Node.js-based project
                 }
                 }
             }

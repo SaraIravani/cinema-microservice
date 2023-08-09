@@ -18,13 +18,13 @@ pipeline {
             steps {
                 script {
                     def nodeTool = tool name: 'NodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-                    dir('cinema-microservice/cinema-catalog-service') { 
+                    dir('cinema-catalog-service/src') { 
                     // Build the microservices here, replace with your build commands
                         sh 'node -v'
                         sh 'npm -v'
                         env.PATH = "${nodeTool}/bin:${env.PATH}"
-                        sh 'npm install --prefix /var/jenkins_home/workspace/cinema-microservice_master/cinema-microservice/cinema-catalog-service' // Example for Node.js-based project
-                        sh 'npm run build --prefix /var/jenkins_home/workspace/cinema-microservice_master/cinema-microservice/cinema-catalog-service' // Example for Node.js-based project
+                        sh 'npm install --prefix /var/jenkins_home/workspace/cinema-microservice_master/cinema-microservice/cinema-catalog-service/src' // Example for Node.js-based project
+                        sh 'npm run build --prefix /var/jenkins_home/workspace/cinema-microservice_master/cinema-microservice/cinema-catalog-service/src' // Example for Node.js-based project
                 }
                 }
             }

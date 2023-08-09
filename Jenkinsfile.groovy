@@ -9,8 +9,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the source code from GitHub
-                //git 'https://github.com/SaraIravani/cinema-microservice.git'
-                checkout scm
+                git 'https://github.com/SaraIravani/cinema-microservice.git'
+                //checkout scm
             }
         }
         

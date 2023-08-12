@@ -18,7 +18,7 @@
     "chrome-debug": "node --debug-brk --inspect src/index.js",
     "coverage": "istanbul cover _mocha $(find ./src -name \"*.spec.js\" -not -path \"./node_modules/*\") ",
     "metric": "nodejs-dashboard -- node -r nodejs-dashboard src/index.js",
-    "build": "tsc"
+    "build": "tsc && npm install"
 
   },
   "keywords": [

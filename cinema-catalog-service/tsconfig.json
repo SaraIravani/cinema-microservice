@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "./dist"  // Specify the output directory
     // ... other options
-  }
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
+
 

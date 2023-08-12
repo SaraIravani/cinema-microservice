@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
-    "checkJs": true
+    "outDir": "./dist"  // Specify the output directory
+    // ... other options
   }
 }
+

@@ -4,10 +4,10 @@ pipeline {
                 DOCKER_REGISTRY = '192.168.1.25' // Replace with your Docker registry
                 IMAGE_NAME = 'cinema-microservice'
                 IMAGE_TAG = 'latest'
-                KUBE_CONFIG = credentials('config') // Jenkins credential for Kubernetes config
-                MONGO_NODE_NUMBER = 'your-mongo-node-number' // Replace with the actual node number
-                MONGO_USER_ADMIN = credentials('mongo-user-admin') // Jenkins credential for MongoDB admin user
-                MONGO_PASS_ADMIN = credentials('mongo-pass-admin') // Jenkins credential for MongoDB admin password
+              //  KUBE_CONFIG = credentials('config') // Jenkins credential for Kubernetes config
+              //  MONGO_NODE_NUMBER = 'your-mongo-node-number' // Replace with the actual node number
+              //  MONGO_USER_ADMIN = credentials('mongo-user-admin') // Jenkins credential for MongoDB admin user
+              //  MONGO_PASS_ADMIN = credentials('mongo-pass-admin') // Jenkins credential for MongoDB admin password
             }
 
     tools {
@@ -43,11 +43,16 @@ pipeline {
            steps {
                 script {
             // Import MongoDB data using docker exec
-                    withCredentials([usernamePassword(credentialsId: 'MongoDBAdmin', passwordVariable: 'MONGO_PASS_ADMIN', usernameVariable: 'MONGO_USER_ADMIN')]) {
-                    sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection countries --file /tmp/countries.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
-                    sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection states --file /tmp/states.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
-                    sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection cities --file /tmp/cities.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
-                    sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection cinemas --file /tmp/cinemas.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
+                   withCredentials([usernamePassword(credentialsId: 'MongoDBAdmin', passwordVariable: 'MONGO_PASS_ADMIN', usernameVariable: 'MONGO_USER_ADMIN')]) {
+                      echo "MongoDB Username: ${MONGO_USER_ADMIN}"
+                      echo "MongoDB Password: ${MONGO_PASS_ADMIN}"
+
+                      // Check environment variables
+                      sh "printenv"  
+                      sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection countries --file /tmp/countries.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
+                      sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection states --file /tmp/states.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
+                      sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection cities --file /tmp/cities.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
+                      sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection cinemas --file /tmp/cinemas.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
             }
         }
     }

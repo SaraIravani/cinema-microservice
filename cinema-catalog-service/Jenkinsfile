@@ -4,7 +4,7 @@ pipeline {
                 DOCKER_REGISTRY = '192.168.1.25' // Replace with your Docker registry
                 IMAGE_NAME = 'cinema-microservice'
                 IMAGE_TAG = 'latest'
-                KUBE_CONFIG = credentials('config') // Jenkins credential for Kubernetes config
+               // KUBE_CONFIG = credentials('config') // Jenkins credential for Kubernetes config
               //  MONGO_NODE_NUMBER = 'your-mongo-node-number' // Replace with the actual node number
                // MONGO_USER_ADMIN = credentials('mongo-user-admin') // Jenkins credential for MongoDB admin user
                // MONGO_PASS_ADMIN = credentials('mongo-pass-admin') // Jenkins credential for MongoDB admin password

@@ -42,6 +42,9 @@ pipeline {
             steps {
                 script {
                     // Import MongoDB data using docker exec
+                    withCredentials([usernamePassword(credentialsId: 'mongo-user-admin', passwordVariable: 'MONGO_PASS_ADMIN', usernameVariable: 'MONGO_USER_ADMIN')]) {
+                      // Your steps here
+                    }
                     sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection countries --file /tmp/countries.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
                     // Repeat the above line for other imports (states, cities, cinemas)
                 }

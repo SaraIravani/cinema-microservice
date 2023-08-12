@@ -13,6 +13,15 @@ pipeline {
                 //checkout scm
             }
         }
+         stage('Clean npm Cache and Update npm') {
+            steps {
+                // Clean npm cache
+                sh 'npm cache clean --force'
+                
+                // Update npm
+                sh 'npm install -g npm'
+            }
+        }
         stage('Install TypeScript') {
             steps {
                   sh 'npm install -g typescript'

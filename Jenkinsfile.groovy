@@ -20,8 +20,8 @@ pipeline {
                 
                 // Update npm
                 //sh 'npm install -g npm'
-            }
-        }
+        //    }
+       // }
     //    stage('Install TypeScript') {
     //        steps {
    //               sh 'npm install -g typescript'

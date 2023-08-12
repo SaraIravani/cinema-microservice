@@ -32,6 +32,7 @@ pipeline {
                         sh 'npm -v'
                         env.PATH = "${nodeTool}/bin:${env.PATH}"
                         sh 'npm install -g typescript'
+                        sh 'tsc --project tsconfig.json'
                         sh 'npm install ' // Example for Node.js-based project
                         def buildOutput = sh(script: 'npm run build', returnStdout: true).trim()
                         echo buildOutput

@@ -23,6 +23,9 @@ pipeline {
                         sh 'node -v'
                         sh 'npm -v'
                         env.PATH = "${nodeTool}/bin:${env.PATH}"
+                        // Install dependencies and address warnings
+                        sh 'npm install flatted' // Install the successor to circular-json
+                        sh 'npm uninstall json3' // Remove the deprecated json3 package
                         sh 'npm install ' // Example for Node.js-based project
                         sh 'npm run build' // Example for Node.js-based project
                 }

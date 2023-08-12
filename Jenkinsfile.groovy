@@ -13,7 +13,12 @@ pipeline {
                 //checkout scm
             }
         }
-        
+        stage('Install TypeScript') {
+            steps {
+                  sh 'npm install -g typescript'
+    }
+}
+
         stage('Build') {
             steps {
                 script {

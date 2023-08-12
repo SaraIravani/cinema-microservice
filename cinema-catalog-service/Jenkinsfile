@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+    environment {
+                DOCKER_REGISTRY = '192.168.1.25' // Replace with your Docker registry
+                IMAGE_NAME = 'cinema-microservice'
+                IMAGE_TAG = 'latest'
+                KUBE_CONFIG = credentials('config') // Jenkins credential for Kubernetes config
+                MONGO_NODE_NUMBER = 'your-mongo-node-number' // Replace with the actual node number
+                MONGO_USER_ADMIN = credentials('mongo-user-admin') // Jenkins credential for MongoDB admin user
+                MONGO_PASS_ADMIN = credentials('mongo-pass-admin') // Jenkins credential for MongoDB admin password
+            }
+
+    tools {
+        // Specify the NodeJS installation you configured in "Global Tool Configuration"
+        nodejs 'NodeJS'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the source code from GitHub
+                git 'https://github.com/SaraIravani/cinema-microservice.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    dir('cinema-catalog-service') { 
+                    // Build the microservices here, replace with your build commands
+                        def nodeTool = tool name: 'NodeJS', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+                        sh 'node -v'
+                        sh 'npm -v'
+                        env.PATH = "${nodeTool}/bin:${env.PATH}"
+                        sh 'npm install ' // Example for Node.js-based project
+                        sh 'npm run build' // Example for Node.js-based project
+                }
+                }
+            }
+        }
+
+        stage('MongoDB Import') {
+            steps {
+                script {
+                    // Import MongoDB data using docker exec
+                    sh "docker exec mongoNode${MONGO_NODE_NUMBER} bash -c 'mongoimport --db cinemas --collection countries --file /tmp/countries.json --jsonArray -u ${MONGO_USER_ADMIN} -p ${MONGO_PASS_ADMIN} --authenticationDatabase \"admin\"'"
+                    // Repeat the above line for other imports (states, cities, cinemas)
+                }
+            }
+        }
+        
+        stage('Docker Build and Push') {
+            
+            steps {
+                // Build the Docker image
+                sh "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ."
+
+                // Log in to the Docker registry using credentials
+                withCredentials([usernamePassword(credentialsId: 'docker-registry-credentials', passwordVariable: 'DOCKER_REGISTRY_PASSWORD', usernameVariable: 'DOCKER_REGISTRY_USERNAME')]) {
+                    sh "docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}"
+                }
+
+                // Push the Docker image to the registry
+                sh "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+            }
+        }
+
+        stage('Deploy to Kubernetes') {           
+            steps {
+                // Apply Kubernetes manifests
+                sh "kubectl --kubeconfig=$KUBE_CONFIG apply -f kubernetes-manifests/"
+            }
+        }
+    }
+}

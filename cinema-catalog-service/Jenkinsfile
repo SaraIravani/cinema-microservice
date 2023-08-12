@@ -43,6 +43,7 @@ pipeline {
            steps {
                 script {
             // Import MongoDB data using docker exec
+                   sh "docker cp file mongoNode${MONGO_NODE_NUMBER}:/tmp" 
                    withCredentials([usernamePassword(credentialsId: 'MongoDBAdmin', passwordVariable: 'MONGO_PASS_ADMIN', usernameVariable: 'MONGO_USER_ADMIN')]) {
                       echo "MongoDB Username: ${MONGO_USER_ADMIN}"
                       echo "MongoDB Password: ${MONGO_PASS_ADMIN}"
